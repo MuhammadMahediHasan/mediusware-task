@@ -49,19 +49,16 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <label v-if="product_variant.length != 1"
-                                           @click="product_variant.splice(index,1); checkVariant"
+                                    <label v-if="product_variant.length != 1" @click="product_variant.splice(index,1); checkVariant"
                                            class="float-right text-primary"
                                            style="cursor: pointer;">Remove</label>
                                     <label v-else for="">.</label>
-                                    <input-tag v-model="item.tags" @input="checkVariant"
-                                               class="form-control"></input-tag>
+                                    <input-tag v-model="item.tags" @input="checkVariant" class="form-control"></input-tag>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer"
-                         v-if="product_variant.length < variants.length && product_variant.length < 3">
+                    <div class="card-footer" v-if="product_variant.length < variants.length && product_variant.length < 3">
                         <button @click="newVariant" class="btn btn-primary">Add another option</button>
                     </div>
 
@@ -113,21 +110,30 @@ export default {
         variants: {
             type: Array,
             required: true
+        },
+        product:{
+            required: true
+        },
+        product_variant_prices : {
+            required: true
+        },
+        product_variants : {
+            required: true
         }
     },
     data() {
         return {
-            product_name: '',
-            product_sku: '',
-            description: '',
+            product: this.product,
+            product_name: this.product.title,
+            product_sku: this.product.sku,
+            description: this.product.description,
             images: [],
-            product_variant: [
-                {
-                    option: this.variants[0].id,
-                    tags: []
-                }
-            ],
-            product_variant_prices: [],
+            // product_variant: [{
+            //     option : 2,
+            //     tags: ['heasd', 'asdf']
+            // }],
+            product_variant: this.product_variants,
+            product_variant_prices: this.product_variant_prices,
             dropzoneOptions: {
                 url: 'https://httpbin.org/post',
                 thumbnailWidth: 150,
@@ -192,7 +198,7 @@ export default {
             }
 
 
-            axios.post('/product', product).then(response => {
+            axios.put('/product/'+this.product.id, product).then(response => {
                 console.log(response.data);
             }).catch(error => {
                 console.log(error);
@@ -205,6 +211,7 @@ export default {
     },
     mounted() {
         console.log('Component mounted.')
+        console.log(this.product_variants)
     }
 }
 </script>

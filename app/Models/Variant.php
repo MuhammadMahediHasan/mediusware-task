@@ -10,4 +10,8 @@ class Variant extends Model
         'title', 'description'
     ];
 
+    public function product_variant(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany('App\Models\ProductVariant', 'variant_id', 'id');
+    }
 }
